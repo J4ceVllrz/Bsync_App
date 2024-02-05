@@ -1,6 +1,5 @@
 import 'package:bsync_app1/misc/colors_texts.dart';
 import 'package:bsync_app1/pages/bottom_bar.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -27,5 +26,3 @@ class MainApp extends StatelessWidget {
     );
   }
 }
-// debugShowCheckedModeBanner: false,
-//       home: BottomBar(),

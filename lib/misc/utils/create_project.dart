@@ -4,15 +4,36 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class CreateProject extends StatefulWidget {
-  const CreateProject({super.key});
+  final Function(String projectText, String descriptionText) onProjectSave;
+  const CreateProject({super.key, required this.onProjectSave});
 
   @override
   State<CreateProject> createState() => _CreateProjectState();
 }
 
 class _CreateProjectState extends State<CreateProject> {
+  void saveProject() {
+    String projectText = _projectTextController.text;
+    String descriptionText = _descriptiontextController.text;
+
+    widget.onProjectSave(projectText, descriptionText);
+    Navigator.pop(context);
+  }
+
+  //Controllers
+  final TextEditingController _projectTextController = TextEditingController();
+  final _descriptiontextController = TextEditingController();
+  //ScrollControllers
+  final ScrollController _projectScrollController = ScrollController();
+  final ScrollController _descriptionScrollController = ScrollController();
+  //FocusNodes
+  final FocusNode _projectFocusNode = FocusNode();
+  final FocusNode _descriptionFocusNode = FocusNode();
+  //Controllers
+
+  //Save Button
+
   final FocusNode _textFieldFocusNode = FocusNode();
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: true,
@@ -27,7 +48,11 @@ class _CreateProjectState extends State<CreateProject> {
                   Styles.headLineStyle3.copyWith(fontWeight: FontWeight.bold),
               textAlign: TextAlign.left,
             ),
-            SaveButton(nameSave: "Save", onPressed: () {}),
+            SaveButton(
+                nameSave: "Save",
+                onPressed: () {
+                  saveProject();
+                }),
           ]),
         ),
         body: SingleChildScrollView(
@@ -37,45 +62,56 @@ class _CreateProjectState extends State<CreateProject> {
               child: Column(
                 children: [
                   Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       //User input
 
-                      Gap(15),
-                      Container(
-                        child: TextField(
-                          autofocus: true,
-                          decoration: InputDecoration(
-                              suffixIcon: const Icon(
-                                  Icons.check_circle_outline_rounded),
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 10),
-                              border: OutlineInputBorder(
-                                  gapPadding: 2,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(4))),
-                              labelText: "Project Title",
-                              labelStyle: Styles.headLineStyle3.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.textColor.withOpacity(0.6))),
-                          style: Styles.headLineStyle4,
-                        ),
+                      const Gap(15),
+                      TextField(
+                        //Project Title
+                        scrollController: _projectScrollController,
+
+                        controller: _projectTextController,
+                        autofocus: true,
+
+                        decoration: InputDecoration(
+                            suffixIcon: IconButton(
+                                onPressed: () {
+                                  _projectTextController.clear();
+                                },
+                                icon: const Icon(Icons.clear_rounded)),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 10),
+                            border: const OutlineInputBorder(
+                                gapPadding: 2,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(4))),
+                            labelText: "Project Title",
+                            labelStyle: Styles.headLineStyle4.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textColor.withOpacity(0.6))),
+                        style: Styles.headLineStyle4,
                       ),
 
                       const Gap(20),
                       TextField(
+                        //Project Description
+                        controller: _descriptiontextController,
                         decoration: InputDecoration(
-                            suffixIcon:
-                                const Icon(Icons.check_circle_outline_rounded),
-                            contentPadding: EdgeInsets.symmetric(
+                            suffixIcon: IconButton(
+                                onPressed: () {
+                                  _descriptiontextController.clear();
+                                },
+                                icon: const Icon(Icons.clear_rounded)),
+                            contentPadding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 10),
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                                 gapPadding: 2,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(4))),
                             labelText: "Description",
-                            labelStyle: Styles.headLineStyle3.copyWith(
+                            labelStyle: Styles.headLineStyle4.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: AppColors.textColor.withOpacity(0.6))),
                         style: Styles.headLineStyle4,
@@ -83,6 +119,7 @@ class _CreateProjectState extends State<CreateProject> {
                       const Gap(20),
                     ],
                   ),
+                  //Next item
                 ],
               ),
             ),

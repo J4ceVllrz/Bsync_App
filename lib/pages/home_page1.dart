@@ -1,5 +1,6 @@
 // ignore_for_file: unused_import
 
+import 'package:bsync_app1/backendData/data/project_data.dart';
 import 'package:bsync_app1/misc/project_cards.dart';
 import 'package:bsync_app1/misc/app_layout.dart';
 import 'package:bsync_app1/misc/colors_texts.dart';
@@ -48,13 +49,24 @@ class _HomePage1State extends State<HomePage1> with TickerProviderStateMixin {
   //       });
   // }
 
+  List<ProjectData> projectDataList = [];
+
   void createProject() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => CreateProject()));
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                CreateProject(onProjectSave: (userSave, descriptionText) {
+                  setState(() {
+                    projectDataList.add(ProjectData(
+                        projectText: userSave,
+                        descriptionText: descriptionText));
+                  });
+                })));
   }
 
   //vars
-  List<String> enteredTexts = [];
+
   //
 
   @override
@@ -67,7 +79,7 @@ class _HomePage1State extends State<HomePage1> with TickerProviderStateMixin {
       body: Container(
         padding: EdgeInsets.only(top: padding.top, bottom: padding.bottom),
         child: CustomScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: NeverScrollableScrollPhysics(),
           slivers: [
             const SliverToBoxAdapter(child: SizedBox(height: 30)),
             SliverToBoxAdapter(
@@ -150,45 +162,37 @@ class _HomePage1State extends State<HomePage1> with TickerProviderStateMixin {
               ),
             ),
             const SliverToBoxAdapter(child: SizedBox(height: 10)),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return Column(
-                    children: [
-                      SizedBox(
-                        width: size.width * 0.9,
-                        child: Container(
-                          height: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            color: Colors.deepPurple,
-                            borderRadius: BorderRadius.circular(8.0),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.deepPurple.withOpacity(.5),
-                                offset: const Offset(-0.3, 0),
-                                blurRadius: .3,
+            //ListView
+            //
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 500,
+                child: ListView.builder(
+                    itemCount: projectDataList.length,
+                    itemBuilder: ((context, index) {
+                      return Column(
+                        children: [
+                          SizedBox(
+                            width: size.width * 0.9,
+                            child: Container(
+                              height: 100,
+                              child: ListTile(
+                                title: Text(projectDataList[index].projectText),
+                                subtitle: Text(
+                                    projectDataList[index].descriptionText),
+                                onTap: () {},
                               ),
-                              BoxShadow(
-                                color: Colors.deepPurple.withOpacity(.5),
-                                offset: const Offset(0, 3),
-                                blurRadius: .3,
-                              ),
-                            ],
+                            ),
                           ),
-                          child: ListTile(),
-                        ),
-                      ),
-                      const Divider(
-                        height: 10,
-                        indent: 50,
-                        endIndent: 50,
-                        color: Colors.transparent,
-                      ),
-                    ],
-                  );
-                },
-                childCount: 2,
+                          Divider(
+                            height: 10,
+                            indent: 50,
+                            endIndent: 50,
+                            color: Colors.transparent,
+                          )
+                        ],
+                      );
+                    })),
               ),
             )
           ],
@@ -316,3 +320,45 @@ class _HomePage1State extends State<HomePage1> with TickerProviderStateMixin {
     // );
   }
 }
+
+// SliverList(
+//             //   delegate: SliverChildBuilderDelegate(
+//             //     (context, index) {
+//             //       return Column(
+//             //         children: [
+//             //           SizedBox(
+//             //             width: size.width * 0.9,
+//             //             child: Container(
+//             //               height: 100,
+//             //               decoration: BoxDecoration(
+//             //                 shape: BoxShape.rectangle,
+//             //                 color: Colors.deepPurple,
+//             //                 borderRadius: BorderRadius.circular(8.0),
+//             //                 boxShadow: [
+//             //                   BoxShadow(
+//             //                     color: Colors.deepPurple.withOpacity(.5),
+//             //                     offset: const Offset(-0.3, 0),
+//             //                     blurRadius: .3,
+//             //                   ),
+//             //                   BoxShadow(
+//             //                     color: Colors.deepPurple.withOpacity(.5),
+//             //                     offset: const Offset(0, 3),
+//             //                     blurRadius: .3,
+//             //                   ),
+//             //                 ],
+//             //               ),
+//             //               child: ListTile(),
+//             //             ),
+//             //           ),
+//             //           const Divider(
+//             //             height: 10,
+//             //             indent: 50,
+//             //             endIndent: 50,
+//             //             color: Colors.transparent,
+//             //           ),
+//             //         ],
+//             //       );
+//             //     },
+//             //     childCount: 2,
+//             //   ),
+//             // )

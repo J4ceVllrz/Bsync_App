@@ -1,7 +1,6 @@
 class ProjectData {
-  // list ALL project titles
+  String projectText;
+  String descriptionText;
 
-  // get project list
-
-  // add new project
+  ProjectData({required this.projectText, required this.descriptionText});
 }
